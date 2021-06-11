@@ -10,10 +10,14 @@
         padding: "1em"
     });
     $('<div>').appendTo(h).prop('id','editor');
-    const editor = ace.edit("editor",{
-        theme: "ace/theme/monokai",
-        mode: "ace/mode/javascript",
-        minLines: 2
+    var editor = ace.edit("editor");
+    editor.$blockScrolling = Infinity;
+    editor.setOptions({
+        enableBasicAutocompletion: true,
+        enableSnippets: true,
+        enableLiveAutocompletion: true
     });
+    editor.setTheme("ace/theme/monokai");
+    editor.getSession().setMode("ace/mode/javascript");
     window.e = editor;
 })();
