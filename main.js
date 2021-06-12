@@ -23,7 +23,7 @@
     $('textarea').on('keyup', e => {
         const sign = '/*\0\0\0*/',
               reg = / ?\/\*\0\0\0\*\//;
-        if(e.ctrlKey || !/^[a-zA-Z0-9]{1}$/.test(e.key)) return;
+        if(!/^[a-zA-Z0-9]{1}$/.test(e.key)) return;
         const s = editor.getSession();
         s.insert(editor.getCursorPosition(), sign);
         const result = js_beautify(s.getValue(),{
@@ -33,7 +33,7 @@
         const ar = result.slice(0, result.indexOf(sign)).split('\n');
         editor.moveCursorToPosition({
             row: ar.length - 1,
-            column: ar.pop().length - 1
+            column: ar.pop().length
         });
     });
 })();
