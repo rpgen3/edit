@@ -20,10 +20,11 @@
     editor.setTheme("ace/theme/monokai");
     editor.getSession().setMode("ace/mode/javascript");
     window.e = editor;
-    $('textarea').on('keyup', e => {
-        if(!/^[a-zA-Z0-9]{1}$/.test(e.key)) return;
-        editor.setValue(js_beautify(editor.getValue(),{
+    $('textarea').on('keydown', e => {
+        if(e.ctrlKey || !/^[a-zA-Z0-9]{1}$/.test(e.key)) return;
+        const s = editor.getSession();
+        s.setValue(js_beautify(s.getValue(),{
             max_preserve_newlines: 2
-        }), 1); // moves cursor to the end
+        }));
     });
 })();
