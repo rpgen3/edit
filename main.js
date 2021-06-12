@@ -10,7 +10,7 @@
     $('<div>').appendTo(h).prop('id','editor').css({
         height: '90vh'
     });
-    var editor = ace.edit("editor");
+    const editor = ace.edit('editor');
     editor.$blockScrolling = Infinity;
     editor.setOptions({
         enableBasicAutocompletion: true,
@@ -20,4 +20,13 @@
     editor.setTheme("ace/theme/monokai");
     editor.getSession().setMode("ace/mode/javascript");
     window.e = editor;
+    $('textarea').on('keyup', e => {
+        if(![
+            'Enter',
+            ' ',
+        ].includes(e.key)) return;
+        editor.setValue(js_beautify(editor.getValue(),{
+            max_preserve_newlines: 2
+        }));
+    });
 })();
