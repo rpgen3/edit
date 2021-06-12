@@ -23,7 +23,7 @@
     $('textarea').on('keyup', e => {
         const sign = '/*\0\0\0*/',
               reg = / ?\/\*\0\0\0\*\//;
-        if(!/^[a-zA-Z0-9]{1}$/.test(e.key)) return;
+        if(e.ctrlKey || !/^[a-zA-Z0-9]{1}$/.test(e.key)) return;
         const s = editor.getSession();
         s.insert(editor.getCursorPosition(), sign);
         const result = js_beautify(s.getValue(),{
