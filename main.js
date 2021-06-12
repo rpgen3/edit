@@ -29,6 +29,6 @@
         editor.setValue(js_beautify(editor.getValue(),{
             max_preserve_newlines: 2
         }));
-        e.moveCursorToPosition(pos);
+        editor.moveCursorToPosition(pos);
     });
 })();
