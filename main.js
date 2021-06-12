@@ -45,8 +45,9 @@
         }
         return false;
     });
-    const input = ({str, pos}={}) => {
-        if(!pos) return;
+    const input = arg => {
+        if(!arg) return;
+        const {str, pos} = arg;
         editor.session.setValue(str);
         editor.moveCursorToPosition(pos);
     };
