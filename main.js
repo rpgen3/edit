@@ -32,8 +32,8 @@
         s.setValue(result.replace(reg,''));
         const ar = result.slice(0, result.indexOf(sign)).split('\n');
         editor.moveCursorToPosition({
-            row: ar.length,
-            column: ar.pop().length
+            row: ar.length - 1,
+            column: ar.pop().length - 1
         });
     });
 })();
