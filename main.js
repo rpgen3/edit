@@ -36,14 +36,16 @@
         input({str, pos});
         history.add({str, pos});
     });
-    $('textarea').get(0).addEventListener('keyup', e => {
+    $('textarea').on('keydown', e => {
         if(!e.ctrlKey) return;
         switch(e.key){
-            case 'z': return undo();
-            case 'Z': return redo();
+            case 'z': undo(); break;
+            case 'Z': redo(); break;
+            default: return;
         }
+        return false;
     });
-    const input = ({str, pos}) => {
+    const input = ({str, pos}={}) => {
         if(!pos) return;
         editor.session.setValue(str);
         editor.moveCursorToPosition(pos);
