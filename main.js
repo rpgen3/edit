@@ -20,7 +20,7 @@
     editor.setTheme("ace/theme/monokai");
     editor.getSession().setMode("ace/mode/javascript");
     window.e = editor;
-    $('textarea').on('keyup', e => {
+    $('textarea').get(0).addEventListener('keyup', e => {
         const sign = '/*\0\0\0*/',
               reg = / ?\/\*\0\0\0\*\//;
         if(e.ctrlKey || !/^[a-zA-Z0-9]{1}$/.test(e.key)) return;
