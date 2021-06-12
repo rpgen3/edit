@@ -1,4 +1,7 @@
 (async()=>{
+    const rpgen3 = await Promise.all([
+        'input'
+    ].map(v=>import(`https://rpgen3.github.io/mylib/export/${v}.mjs`))).then(v=>Object.assign({},...v));
     await Promise.all([
         "https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js",
         "https://cdnjs.cloudflare.com/ajax/libs/js-beautify/1.10.0/beautify.js"
@@ -6,7 +9,8 @@
     const getScript = url => new Promise((resolve, reject)=>$.getScript(url).done(resolve).fail(reject));
     await getScript("https://cdnjs.cloudflare.com/ajax/libs/ace/1.2.0/ace.js");
     await getScript("https://cdnjs.cloudflare.com/ajax/libs/ace/1.2.0/ext-language_tools.js");
-    $('<div>').appendTo('body').prop('id','editor').css({
+    const body = 'body';
+    $('<div>').appendTo(body).prop('id','editor').css({
         height: '90vh'
     });
     const editor = ace.edit('editor');
@@ -18,11 +22,11 @@
     });
     editor.setTheme("ace/theme/monokai");
     editor.session.setMode("ace/mode/javascript");
-    window.e = editor;
     const sign = '/*\0\0\0*/',
           reg = / ?\/\*\0\0\0\*\//;
-    $('textarea').get(0).addEventListener('keyup', e => {
-        if(e.ctrlKey || !/^[a-zA-Z0-9]{1}$/.test(e.key)) return;
+    $('textarea').on('input', e => {
+        if(!isShape()) return;
+        if(!/^[a-zA-Z0-9]{1}$/.test(e.originalEvent.data)) return;
         editor.session.insert(editor.getCursorPosition(), sign);
         const result = js_beautify(editor.session.getValue(),{
             max_preserve_newlines: 2
@@ -71,4 +75,13 @@
     }
     const undo = () => input(history.undo()),
           redo = () => input(history.redo());
+    const hUI = $('<div>').prependTo(body);
+    const addBtn = (ttl, func) => $('<button>').appendTo(hUI).text(ttl).on('click', func);
+    addBtn('undo', undo);
+    addBtn('redo', redo);
+    const isShape = rpgen3.addInputBool(hUI,{
+        label: '自動整形',
+        save: true,
+        value: true
+    });
 })();
