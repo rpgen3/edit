@@ -20,15 +20,16 @@
     editor.setTheme("ace/theme/monokai");
     editor.getSession().setMode("ace/mode/javascript");
     window.e = editor;
-    const sign = '/*\0\0\0*/';
     $('textarea').on('keyup', e => {
+        const sign = '/*\0\0\0*/',
+              reg = / ?\/\*\0\0\0\*\//;
         if(e.ctrlKey || !/^[a-zA-Z0-9]{1}$/.test(e.key)) return;
         const s = editor.getSession();
         s.insert(editor.getCursorPosition(), sign);
         const result = js_beautify(s.getValue(),{
             max_preserve_newlines: 2
         });
-        s.setValue(result.replace(sign,''));
+        s.setValue(result.replace(reg,''));
         const ar = result.slice(0, result.indexOf(sign)).split('\n');
         editor.moveCursorToPosition({
             row: ar.length,
