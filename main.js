@@ -21,12 +21,14 @@
     editor.getSession().setMode("ace/mode/javascript");
     window.e = editor;
     $('textarea').on('keyup', e => {
-        if(![
+        if([
             'Enter',
             ' ',
         ].includes(e.key)) return;
+        const pos = editor.getCursorPosition();
         editor.setValue(js_beautify(editor.getValue(),{
             max_preserve_newlines: 2
         }));
+        e.moveCursorToPosition(pos);
     });
 })();
