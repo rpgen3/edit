@@ -21,7 +21,7 @@
     editor.getSession().setMode("ace/mode/javascript");
     window.e = editor;
     $('textarea').on('keyup', e => {
-        if(e.key.length === 1 && /[a-zA-Z0-9]/.test(e.key)) return;
+        if(!/^[a-zA-Z0-9]{1}$/.test(e.key)) return;
         editor.setValue(js_beautify(editor.getValue(),{
             max_preserve_newlines: 2
         }), 1); // moves cursor to the end
