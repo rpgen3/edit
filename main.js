@@ -8,7 +8,9 @@
         "text-align": "center",
         padding: "1em"
     });
-    $('<div>').appendTo(h).prop('id','editor');
+    $('<div>').appendTo(h).prop('id','editor').css({
+        height: 600
+    });
     var editor = ace.edit("editor");
     editor.$blockScrolling = Infinity;
     editor.setOptions({
