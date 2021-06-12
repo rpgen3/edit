@@ -22,9 +22,11 @@
     window.e = editor;
     $('textarea').on('keydown', e => {
         if(e.ctrlKey || !/^[a-zA-Z0-9]{1}$/.test(e.key)) return;
-        const s = editor.getSession();
+        const pos = editor.getCursorPosition(),
+              s = editor.getSession();
         s.setValue(js_beautify(s.getValue(),{
             max_preserve_newlines: 2
         }));
+        editor.moveCursorToPosition(pos);
     });
 })();
