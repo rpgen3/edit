@@ -1,4 +1,5 @@
 (async()=>{
+    const isMobile = navigator.userAgent.match(/iPhone|Android.+Mobile/);
     const rpgen3 = await Promise.all([
         'input'
     ].map(v=>import(`https://rpgen3.github.io/mylib/export/${v}.mjs`))).then(v=>Object.assign({},...v));
@@ -8,10 +9,10 @@
     ].map(v=>import(v)));
     const getScript = url => new Promise((resolve, reject)=>$.getScript(url).done(resolve).fail(reject));
     await getScript("https://cdnjs.cloudflare.com/ajax/libs/ace/1.2.0/ace.js");
-    await getScript("https://cdnjs.cloudflare.com/ajax/libs/ace/1.2.0/ext-language_tools.js");
+    if(isMobile) await getScript("https://cdnjs.cloudflare.com/ajax/libs/ace/1.2.0/ext-language_tools.js");
     const body = 'body';
     $('<div>').appendTo(body).prop('id','editor').css({
-        height: '90vh'
+        height: '80vh'
     });
     const editor = ace.edit('editor');
     editor.$blockScrolling = Infinity;
@@ -22,7 +23,6 @@
     });
     editor.setTheme("ace/theme/monokai");
     editor.session.setMode("ace/mode/javascript");
-    const isMobile = navigator.userAgent.match(/iPhone|Android.+Mobile/);
     $('textarea').on(isMobile ? 'change' : 'input', e => {
         if(!isShape()) return;
         if(!/^[a-zA-Z0-9]{1}$/.test(e.originalEvent.data)) return;
