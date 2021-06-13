@@ -22,24 +22,29 @@
     });
     editor.setTheme("ace/theme/monokai");
     editor.session.setMode("ace/mode/javascript");
-    const sign = '/*\0\0\0*/',
-          reg = / ?\/\*\0\0\0\*\//;
     $('textarea').on('input', e => {
         if(!isShape()) return;
         if(!/^[a-zA-Z0-9]{1}$/.test(e.originalEvent.data)) return;
-        editor.session.insert(editor.getCursorPosition(), sign);
-        const result = js_beautify(editor.session.getValue(),{
+        const obj = beautify({
+            indent_with_tabs: true,
             max_preserve_newlines: 2
         });
-        const str = result.replace(reg,''),
+        input(obj);
+        log.add(obj);
+    });
+    const beautify = option => {
+        const sign = '/*\0\0\0*/',
+              reg = / ?\/\*\0\0\0\*\//;
+        editor.session.insert(editor.getCursorPosition(), sign);
+        const result = js_beautify(editor.session.getValue(), option),
+              str = result.replace(reg,''),
               ar = result.slice(0, result.indexOf(sign)).split('\n'),
               pos = {
                   row: ar.length - 1,
                   column: ar.pop().length
               };
-        input({str, pos});
-        history.add({str, pos});
-    });
+        return {str, pos};
+    };
     $('textarea').on('keydown', e => {
         if(!e.ctrlKey) return;
         switch(e.key){
@@ -55,7 +60,7 @@
         editor.session.setValue(str);
         editor.moveCursorToPosition(pos);
     };
-    const history = new class {
+    const log = new class {
         constructor() {
             this.now = null;
             this.add(null);
@@ -73,12 +78,17 @@
             return this.now.next ? (this.now = this.now.next).data : null;
         }
     }
-    const undo = () => input(history.undo()),
-          redo = () => input(history.redo());
+    const undo = () => input(log.undo()),
+          redo = () => input(log.redo());
     const hUI = $('<div>').prependTo(body);
     const addBtn = (ttl, func) => $('<button>').appendTo(hUI).text(ttl).on('click', func);
     addBtn('undo', undo);
     addBtn('redo', redo);
+    const minify = () => input(beautify({
+        indent_size: 0,
+        max_preserve_newlines: 0
+    }));
+    addBtn('軽量化', minify);
     const isShape = rpgen3.addInputBool(hUI,{
         label: '自動整形',
         save: true,
