@@ -75,7 +75,7 @@
         redo() {
             return this.now.next ? (this.now = this.now.next).data : null;
         }
-    }
+    }();
     const undo = () => input(log.undo()),
           redo = () => input(log.redo());
     const hUI = $('<div>').prependTo(body);
