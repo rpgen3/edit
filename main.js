@@ -33,12 +33,11 @@
         log.add(obj);
     });
     const beautify = option => {
-        const sign = '/*\0\0\0*/',
-              reg = / ?\/\*\0\0\0\*\//;
+        const sign = '\0\0\0';
         editor.session.insert(editor.getCursorPosition(), sign);
-        const result = js_beautify(editor.session.getValue(), option),
-              str = result.replace(reg,''),
-              ar = result.slice(0, result.indexOf(sign)).split('\n'),
+        const rst = js_beautify(editor.session.getValue(), option),
+              str = rst.replace(sign,''),
+              ar = rst.slice(0, rst.indexOf(sign)).split('\n'),
               pos = {
                   row: ar.length - 1,
                   column: ar.pop().length
@@ -84,11 +83,6 @@
     const addBtn = (ttl, func) => $('<button>').appendTo(hUI).text(ttl).on('click', func);
     addBtn('undo', undo);
     addBtn('redo', redo);
-    const minify = () => input(beautify({
-        indent_size: 0,
-        max_preserve_newlines: 0
-    }));
-    addBtn('軽量化', minify);
     const isShape = rpgen3.addInputBool(hUI,{
         label: '自動整形',
         save: true,
