@@ -22,7 +22,8 @@
     });
     editor.setTheme("ace/theme/monokai");
     editor.session.setMode("ace/mode/javascript");
-    $('textarea').on('input', e => {
+    const isMobile = navigator.userAgent.match(/iPhone|Android.+Mobile/);
+    $('textarea').on(isMobile ? 'change' : 'input', e => {
         if(!isShape()) return;
         if(!/^[a-zA-Z0-9]{1}$/.test(e.originalEvent.data)) return;
         const obj = beautify({
