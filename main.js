@@ -11,9 +11,7 @@
     await getScript("https://cdnjs.cloudflare.com/ajax/libs/ace/1.2.0/ace.js");
     if(isMobile) await getScript("https://cdnjs.cloudflare.com/ajax/libs/ace/1.2.0/ext-language_tools.js");
     const body = 'body';
-    $('<div>').appendTo(body).prop('id','editor').css({
-        height: '80vh'
-    });
+    $('<div>').appendTo(body).prop('id','editor');
     const editor = ace.edit('editor');
     editor.$blockScrolling = Infinity;
     editor.setOptions({
@@ -88,5 +86,8 @@
         label: '自動整形',
         save: true,
         value: true
+    });
+    $('#editor').css({
+        height: Math.floor(100 - hUI.height() / $(window).height() - 5) + 'vh'
     });
 })();
