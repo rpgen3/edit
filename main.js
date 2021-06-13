@@ -9,7 +9,7 @@
     ].map(v=>import(v)));
     const getScript = url => new Promise((resolve, reject)=>$.getScript(url).done(resolve).fail(reject));
     await getScript("https://cdnjs.cloudflare.com/ajax/libs/ace/1.2.0/ace.js");
-    if(isMobile) await getScript("https://cdnjs.cloudflare.com/ajax/libs/ace/1.2.0/ext-language_tools.js");
+    await getScript("https://cdnjs.cloudflare.com/ajax/libs/ace/1.2.0/ext-language_tools.js");
     const body = 'body';
     $('<div>').appendTo(body).prop('id','editor');
     const editor = ace.edit('editor');
@@ -21,7 +21,7 @@
     });
     editor.setTheme("ace/theme/monokai");
     editor.session.setMode("ace/mode/javascript");
-    $('textarea').on(isMobile ? 'change' : 'input', e => {
+    $('textarea').on('input', e => {
         if(!isShape()) return;
         if(!/^[a-zA-Z0-9]{1}$/.test(e.originalEvent.data)) return;
         const obj = beautify({
@@ -88,6 +88,6 @@
         value: true
     });
     $('#editor').css({
-        height: Math.floor(100 - hUI.height() / $(window).height() - 5) + 'vh'
+        height: Math.floor(100 - hUI.height() / $(window).height() * 100) + 'vh'
     });
 })();
