@@ -88,6 +88,6 @@
         value: true
     });
     $('#editor').css({
-        height: Math.floor(100 - hUI.height() / $(window).height() * 100) + 'vh'
+        height: Math.floor(100 - 100 * hUI.height() / $(window).height()) + 'vh'
     });
 })();
