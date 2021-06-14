@@ -26,7 +26,9 @@
         if(!/^[a-zA-Z0-9]{1}$/.test(e.originalEvent.data)) return;
         const obj = beautify({
             indent_with_tabs: true,
-            max_preserve_newlines: 2
+            max_preserve_newlines: 1,
+            jslint_happy: true,
+            space_before_conditional: false
         });
         input(obj);
         log.add(obj);
