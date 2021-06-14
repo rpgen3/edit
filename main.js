@@ -34,7 +34,7 @@
         log.add(obj);
     });
     const beautify = option => {
-        const sign = '\0\0\0';
+        const sign = '\0';
         editor.session.insert(editor.getCursorPosition(), sign);
         const rst = js_beautify(editor.session.getValue(), option),
               str = rst.replace(sign,''),
