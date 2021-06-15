@@ -22,16 +22,18 @@
     editor.setTheme("ace/theme/monokai");
     editor.session.setMode("ace/mode/javascript");
     $('textarea').on('input', e => {
-        if(!isShape()) return;
-        if(!/^[a-zA-Z0-9]{1}$/.test(e.originalEvent.data)) return;
-        const obj = beautify({
-            indent_with_tabs: true,
-            max_preserve_newlines: 1,
-            jslint_happy: true,
-            space_before_conditional: false
+        if(isShape() && /^[a-zA-Z0-9]{1}$/.test(e.originalEvent.data)) {
+            input(beautify({
+                indent_with_tabs: true,
+                max_preserve_newlines: 1,
+                jslint_happy: true,
+                space_before_conditional: false
+            }));
+        }
+        log.add({
+            pos: editor.getCursorPosition(),
+            str: editor.session.getValue()
         });
-        input(obj);
-        log.add(obj);
     });
     const beautify = option => {
         const sign = '\0\0\0';
