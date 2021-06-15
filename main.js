@@ -21,8 +21,8 @@
     });
     editor.setTheme("ace/theme/monokai");
     editor.session.setMode("ace/mode/javascript");
-    $('textarea').on('input', e => {
-        if(isShape() && /^[a-zA-Z0-9]{1}$/.test(e.originalEvent.data)) {
+    $('textarea').get(0).addEventListener('keyup', e => {
+        if(isShape() && !e.ctrlKey && /^[a-zA-Z0-9]{1}$/.test(e.key)) {
             input(beautify({
                 indent_with_tabs: true,
                 max_preserve_newlines: 1,
@@ -30,9 +30,10 @@
                 space_before_conditional: false
             }));
         }
+        const str = editor.session.getValue();
+        if(str === log.get()?.str) return;
         log.add({
-            pos: editor.getCursorPosition(),
-            str: editor.session.getValue()
+            str, pos: editor.getCursorPosition()
         });
     });
     const beautify = option => {
@@ -40,12 +41,13 @@
         editor.session.insert(editor.getCursorPosition(), sign);
         const rst = js_beautify(editor.session.getValue(), option),
               str = rst.replace(sign,''),
-              ar = rst.slice(0, rst.indexOf(sign)).split('\n'),
-              pos = {
-                  row: ar.length - 1,
-                  column: ar.pop().length
-              };
-        return {str, pos};
+              ar = rst.slice(0, rst.indexOf(sign)).split('\n');
+        return {
+            str, pos: {
+                row: ar.length - 1,
+                column: ar.pop().length
+            }
+        };
     };
     $('textarea').on('keydown', e => {
         if(!e.ctrlKey) return;
@@ -66,6 +68,9 @@
         constructor() {
             this.now = null;
             this.add(null);
+        }
+        get(){
+            return this.now.data;
         }
         add(data) {
             this.now = {
